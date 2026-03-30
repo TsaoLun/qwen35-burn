@@ -1,0 +1,36 @@
+[package]
+name = "qwen35-burn"
+version = "0.1.0"
+edition = "2021"
+license = "MIT OR Apache-2.0"
+description = "Qwen3.5 language model inference using the Burn deep learning framework (WGPU backend)"
+
+[features]
+default = ["std"]
+std = []
+wgpu = ["burn/wgpu"]
+# wgpu with fusion (operator graph fusion) and autotune (kernel auto-selection)
+wgpu-fast = ["wgpu", "burn/fusion", "burn/autotune"]
+ndarray = ["burn/ndarray"]
+cuda = ["burn/cuda"]
+
+[[example]]
+name = "chat"
+
+[[example]]
+name = "bench"
+
+[dependencies]
+burn = { path = "../burn/crates/burn", default-features = false, features = ["std"] }
+safetensors = "0.7"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+tokenizers = { version = "0.22", default-features = false, features = ["onig"] }
+rand = "0.10"
+half = { version = "2.4", features = ["serde"] }
+tracing = "0.1"
+glob = "0.3"
+
+[dev-dependencies]
+clap = { version = "4", features = ["derive"] }
+burn = { path = "../burn/crates/burn", default-features = false, features = ["std", "ndarray"] }
