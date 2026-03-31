@@ -67,12 +67,12 @@ cargo run --release --features wgpu --example chat -- \
 
 
 ## TODO
-- [] recurrent forward parallel optimization
-- [] multi-turn dialogue with KV-cache management
-- [] attn_output_gate, mlp_only_layers never used/implemented
-- [] extract hardcoded kernel_size=4 in conv1d_prefill as a param
-- [] ineffective KV cache eviction strategy
-- [] multimodal support
+- recurrent forward parallel optimization
+- multi-turn dialogue with KV-cache management
+- attn_output_gate, mlp_only_layers never used/implemented
+- extract hardcoded kernel_size=4 in conv1d_prefill as a param
+- ineffective KV cache eviction strategy
+- multimodal support
 
 ## Benchmarks
 

@@ -8,9 +8,8 @@ description = "Qwen3.5 language model inference using the Burn deep learning fra
 [features]
 default = ["std"]
 std = []
-wgpu = ["burn/wgpu"]
 # wgpu with fusion (operator graph fusion) and autotune (kernel auto-selection)
-wgpu-fast = ["wgpu", "burn/fusion", "burn/autotune"]
+wgpu = ["burn/wgpu", "burn/fusion", "burn/autotune"]
 ndarray = ["burn/ndarray"]
 cuda = ["burn/cuda"]
 
@@ -21,7 +20,7 @@ name = "chat"
 name = "bench"
 
 [dependencies]
-burn = { path = "../burn/crates/burn", default-features = false, features = ["std"] }
+burn = "0.20.1"
 safetensors = "0.7"
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
@@ -33,4 +32,4 @@ glob = "0.3"
 
 [dev-dependencies]
 clap = { version = "4", features = ["derive"] }
-burn = { path = "../burn/crates/burn", default-features = false, features = ["std", "ndarray"] }
+burn = "0.20.1"

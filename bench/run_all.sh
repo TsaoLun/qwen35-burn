@@ -2,7 +2,7 @@
 # Run Burn and MLX benchmarks in sequence, then print the comparison table.
 #
 # Prerequisites:
-#   Burn  : cargo (wgpu-fast feature built automatically)
+#   Burn  : cargo (wgpu feature built automatically)
 #   MLX   : pip install mlx-lm
 set -euo pipefail
 

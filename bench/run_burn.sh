@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Run the Burn (WGPU/Metal) throughput benchmark.
 #
-# Builds with wgpu-fast (fusion + autotune) for best performance.
+# Builds with wgpu (fusion + autotune) for best performance.
 #
 # Environment variables (all optional):
 #   MODEL_DIR      path to Qwen3.5-0.8B model dir  (default: ../models/Qwen3.5-0.8B)
@@ -23,10 +23,10 @@ OUTPUT="$SCRIPT_DIR/results/burn.json"
 
 mkdir -p "$SCRIPT_DIR/results"
 
-echo "=== Burn benchmark (wgpu-fast: fusion + autotune) ==="
+echo "=== Burn benchmark (wgpu: fusion + autotune) ==="
 echo "Building..."
 cd "$PROJECT_DIR"
-cargo build --release --features wgpu-fast --example bench 2>&1 | tail -3
+cargo build --release --features wgpu --example bench 2>&1 | tail -3
 
 echo "Running..."
 ./target/release/examples/bench \
