@@ -30,6 +30,9 @@ half = { version = "2.4", features = ["serde"] }
 tracing = "0.1"
 glob = "0.3"
 
+# CubeCL for custom GPU kernels
+cubecl = { path = "cubecl/crates/cubecl", features = ["wgpu"] }
+
 [dev-dependencies]
 clap = { version = "4", features = ["derive"] }
 burn = "0.20.1"

@@ -500,7 +500,7 @@ checksum = "a724a5d8d5865a1f6b304f629eb19f51489760689501c583b3e1f4209f067357"
 dependencies = [
  "burn-std",
  "bytemuck",
- "cubecl",
+ "cubecl 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "derive-new",
  "hashbrown 0.16.1",
  "num-traits",
@@ -604,7 +604,7 @@ dependencies = [
  "burn-backend",
  "burn-cubecl",
  "burn-fusion",
- "cubecl",
+ "cubecl 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -618,7 +618,7 @@ dependencies = [
  "burn-fusion",
  "burn-ir",
  "burn-std",
- "cubecl",
+ "cubecl 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "cubek",
  "derive-new",
  "futures-lite",
@@ -637,7 +637,7 @@ dependencies = [
  "burn-fusion",
  "burn-ir",
  "burn-std",
- "cubecl",
+ "cubecl 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "cubek",
  "derive-new",
  "serde",
@@ -652,7 +652,7 @@ dependencies = [
  "burn-backend",
  "burn-cubecl",
  "burn-fusion",
- "cubecl",
+ "cubecl 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -806,7 +806,7 @@ dependencies = [
  "burn-backend",
  "burn-cubecl",
  "burn-fusion",
- "cubecl",
+ "cubecl 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -831,8 +831,8 @@ checksum = "25a9ed8e34a4a49d3754586f306075d6b55a5e08343ac75c06f47e7d9f825271"
 dependencies = [
  "bytemuck",
  "bytes",
- "cubecl",
- "cubecl-common",
+ "cubecl 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "cubecl-common 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "half",
  "num-traits",
  "serde",
@@ -918,7 +918,7 @@ dependencies = [
  "burn-backend",
  "burn-cubecl",
  "burn-fusion",
- "cubecl",
+ "cubecl 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -1442,18 +1442,66 @@ dependencies = [
 [[package]]
 name = "cubecl"
 version = "0.9.0"
+dependencies = [
+ "cubecl-core 0.9.0",
+ "cubecl-cpu 0.9.0",
+ "cubecl-cuda 0.9.0",
+ "cubecl-hip 0.9.0",
+ "cubecl-ir 0.9.0",
+ "cubecl-runtime 0.9.0",
+ "cubecl-std 0.9.0",
+ "cubecl-wgpu 0.9.0",
+ "half",
+]
+
+[[package]]
+name = "cubecl"
+version = "0.9.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "053856efd5436224775b9423d43d86f53d5b1d3af9a6b9983d9a313a0922638f"
 dependencies = [
- "cubecl-core",
- "cubecl-cpu",
- "cubecl-cuda",
- "cubecl-hip",
- "cubecl-ir",
- "cubecl-runtime",
- "cubecl-std",
- "cubecl-wgpu",
+ "cubecl-core 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "cubecl-cpu 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "cubecl-cuda 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "cubecl-hip 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "cubecl-ir 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "cubecl-runtime 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "cubecl-std 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "cubecl-wgpu 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "half",
+]
+
+[[package]]
+name = "cubecl-common"
+version = "0.9.0"
+dependencies = [
+ "backtrace",
+ "bytemuck",
+ "cfg-if",
+ "cfg_aliases",
+ "derive-new",
+ "derive_more",
+ "dirs",
+ "embassy-futures",
+ "embassy-time",
+ "float4",
+ "float8 0.4.2",
+ "futures-lite",
+ "half",
+ "hashbrown 0.15.5",
+ "log",
+ "num-traits",
+ "parking_lot",
+ "portable-atomic",
+ "portable-atomic-util",
+ "rand 0.9.2",
+ "sanitize-filename",
+ "serde",
+ "serde_bytes",
+ "serde_json",
+ "spin",
+ "wasm-bindgen-futures",
+ "web-time",
 ]
 
 [[package]]
@@ -1496,15 +1544,39 @@ dependencies = [
 [[package]]
 name = "cubecl-core"
 version = "0.9.0"
+dependencies = [
+ "bitflags",
+ "bytemuck",
+ "cubecl-common 0.9.0",
+ "cubecl-ir 0.9.0",
+ "cubecl-macros 0.9.0",
+ "cubecl-runtime 0.9.0",
+ "derive-new",
+ "derive_more",
+ "enumset",
+ "float-ord",
+ "half",
+ "hashbrown 0.15.5",
+ "log",
+ "num-traits",
+ "paste",
+ "serde",
+ "serde_json",
+ "variadics_please",
+]
+
+[[package]]
+name = "cubecl-core"
+version = "0.9.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "98374a31d2b68b55709891169832ccf205408c201c5e023964482441f213d0b9"
 dependencies = [
  "bitflags",
  "bytemuck",
- "cubecl-common",
- "cubecl-ir",
- "cubecl-macros",
- "cubecl-runtime",
+ "cubecl-common 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "cubecl-ir 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "cubecl-macros 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "cubecl-runtime 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "derive-new",
  "derive_more",
  "enumset",
@@ -1523,14 +1595,29 @@ dependencies = [
 [[package]]
 name = "cubecl-cpp"
 version = "0.9.0"
+dependencies = [
+ "bytemuck",
+ "cubecl-common 0.9.0",
+ "cubecl-core 0.9.0",
+ "cubecl-opt 0.9.0",
+ "cubecl-runtime 0.9.0",
+ "derive-new",
+ "half",
+ "itertools 0.14.0",
+ "log",
+]
+
+[[package]]
+name = "cubecl-cpp"
+version = "0.9.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "fb24d96c1ff84ab4def0a529e384311a15cb771310aaf2b640c312384c3bca23"
 dependencies = [
  "bytemuck",
- "cubecl-common",
- "cubecl-core",
- "cubecl-opt",
- "cubecl-runtime",
+ "cubecl-common 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "cubecl-core 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "cubecl-opt 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "cubecl-runtime 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "derive-new",
  "half",
  "itertools 0.14.0",
@@ -1540,15 +1627,35 @@ dependencies = [
 [[package]]
 name = "cubecl-cpu"
 version = "0.9.0"
+dependencies = [
+ "bytemuck",
+ "cubecl-common 0.9.0",
+ "cubecl-core 0.9.0",
+ "cubecl-opt 0.9.0",
+ "cubecl-runtime 0.9.0",
+ "cubecl-std 0.9.0",
+ "derive-new",
+ "half",
+ "log",
+ "paste",
+ "serde",
+ "sysinfo 0.36.1",
+ "tracel-llvm",
+ "tracel-llvm-bundler",
+]
+
+[[package]]
+name = "cubecl-cpu"
+version = "0.9.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "152588a6e16b6bda5e8216af7a6fad3d7de4697294b6ce0f6acbe3a9029ff674"
 dependencies = [
  "bytemuck",
- "cubecl-common",
- "cubecl-core",
- "cubecl-opt",
- "cubecl-runtime",
- "cubecl-std",
+ "cubecl-common 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "cubecl-core 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "cubecl-opt 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "cubecl-runtime 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "cubecl-std 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "derive-new",
  "half",
  "log",
@@ -1562,15 +1669,32 @@ dependencies = [
 [[package]]
 name = "cubecl-cuda"
 version = "0.9.0"
+dependencies = [
+ "bytemuck",
+ "cubecl-common 0.9.0",
+ "cubecl-core 0.9.0",
+ "cubecl-cpp 0.9.0",
+ "cubecl-runtime 0.9.0",
+ "cubecl-zspace 0.9.0",
+ "cudarc",
+ "derive-new",
+ "half",
+ "log",
+ "serde",
+]
+
+[[package]]
+name = "cubecl-cuda"
+version = "0.9.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "6f74a5750c45090d1fc5ddf6a19fea9a099aa1f6800b78f1167a2d60182d1d96"
 dependencies = [
  "bytemuck",
- "cubecl-common",
- "cubecl-core",
- "cubecl-cpp",
- "cubecl-runtime",
- "cubecl-zspace",
+ "cubecl-common 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "cubecl-core 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "cubecl-cpp 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "cubecl-runtime 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "cubecl-zspace 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "cudarc",
  "derive-new",
  "half",
@@ -1582,16 +1706,34 @@ dependencies = [
 [[package]]
 name = "cubecl-hip"
 version = "0.9.0"
+dependencies = [
+ "bytemuck",
+ "cubecl-common 0.9.0",
+ "cubecl-core 0.9.0",
+ "cubecl-cpp 0.9.0",
+ "cubecl-hip-sys",
+ "cubecl-runtime 0.9.0",
+ "cubecl-zspace 0.9.0",
+ "derive-new",
+ "half",
+ "log",
+ "paste",
+ "serde",
+]
+
+[[package]]
+name = "cubecl-hip"
+version = "0.9.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "cbae9bc7ee6093d0d7a549c05873dff3478f9087b59eb09b223a97d642c849aa"
 dependencies = [
  "bytemuck",
- "cubecl-common",
- "cubecl-core",
- "cubecl-cpp",
+ "cubecl-common 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "cubecl-core 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "cubecl-cpp 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "cubecl-hip-sys",
- "cubecl-runtime",
- "cubecl-zspace",
+ "cubecl-runtime 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "cubecl-zspace 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "derive-new",
  "half",
  "log",
@@ -1613,11 +1755,30 @@ dependencies = [
 [[package]]
 name = "cubecl-ir"
 version = "0.9.0"
+dependencies = [
+ "cubecl-common 0.9.0",
+ "cubecl-macros-internal 0.9.0",
+ "derive-new",
+ "derive_more",
+ "enumset",
+ "float-ord",
+ "fnv",
+ "half",
+ "hashbrown 0.15.5",
+ "num-traits",
+ "portable-atomic",
+ "serde",
+ "variadics_please",
+]
+
+[[package]]
+name = "cubecl-ir"
+version = "0.9.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "361b608ff9f05024c7a7e381852689acd95b6af5af956d68734692b27d5f75ef"
 dependencies = [
- "cubecl-common",
- "cubecl-macros-internal",
+ "cubecl-common 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "cubecl-macros-internal 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "derive-new",
  "derive_more",
  "enumset",
@@ -1634,14 +1795,38 @@ dependencies = [
 [[package]]
 name = "cubecl-macros"
 version = "0.9.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7c9a872d16207c6a27ed45942fd311a281394dd384b14a21f72131db1556a977"
 dependencies = [
- "cubecl-common",
+ "cubecl-common 0.9.0",
  "darling 0.21.3",
  "derive-new",
  "ident_case",
  "prettyplease",
+ "proc-macro2",
+ "quote",
+ "syn",
+]
+
+[[package]]
+name = "cubecl-macros"
+version = "0.9.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "7c9a872d16207c6a27ed45942fd311a281394dd384b14a21f72131db1556a977"
+dependencies = [
+ "cubecl-common 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "darling 0.21.3",
+ "derive-new",
+ "ident_case",
+ "prettyplease",
+ "proc-macro2",
+ "quote",
+ "syn",
+]
+
+[[package]]
+name = "cubecl-macros-internal"
+version = "0.9.0"
+dependencies = [
+ "darling 0.21.3",
  "proc-macro2",
  "quote",
  "syn",
@@ -1662,12 +1847,28 @@ dependencies = [
 [[package]]
 name = "cubecl-opt"
 version = "0.9.0"
+dependencies = [
+ "cubecl-common 0.9.0",
+ "cubecl-core 0.9.0",
+ "cubecl-ir 0.9.0",
+ "float-ord",
+ "log",
+ "num",
+ "petgraph",
+ "smallvec",
+ "stable-vec",
+ "type-map",
+]
+
+[[package]]
+name = "cubecl-opt"
+version = "0.9.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "bdcff25fdcbd82ea4277c30a81e162722859f57c6ae105c0a3c53f8bb91154f6"
 dependencies = [
- "cubecl-common",
- "cubecl-core",
- "cubecl-ir",
+ "cubecl-common 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "cubecl-core 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "cubecl-ir 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "float-ord",
  "log",
  "num",
@@ -1680,6 +1881,34 @@ dependencies = [
 [[package]]
 name = "cubecl-runtime"
 version = "0.9.0"
+dependencies = [
+ "async-channel",
+ "bytemuck",
+ "cfg-if",
+ "cfg_aliases",
+ "cubecl-common 0.9.0",
+ "cubecl-ir 0.9.0",
+ "derive-new",
+ "derive_more",
+ "dirs",
+ "enumset",
+ "foldhash 0.1.5",
+ "hashbrown 0.15.5",
+ "log",
+ "md5",
+ "serde",
+ "serde_json",
+ "spin",
+ "thiserror 2.0.18",
+ "toml",
+ "variadics_please",
+ "wasm-bindgen-futures",
+ "web-time",
+]
+
+[[package]]
+name = "cubecl-runtime"
+version = "0.9.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "b02e28997a8d75311afae4d2cea7b593eb125312f845874118a59d78c7a6b34c"
 dependencies = [
@@ -1687,8 +1916,8 @@ dependencies = [
  "bytemuck",
  "cfg-if",
  "cfg_aliases",
- "cubecl-common",
- "cubecl-ir",
+ "cubecl-common 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "cubecl-ir 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "derive-new",
  "derive_more",
  "dirs",
@@ -1711,12 +1940,28 @@ dependencies = [
 [[package]]
 name = "cubecl-std"
 version = "0.9.0"
+dependencies = [
+ "cubecl-common 0.9.0",
+ "cubecl-core 0.9.0",
+ "cubecl-runtime 0.9.0",
+ "foldhash 0.1.5",
+ "half",
+ "num-traits",
+ "paste",
+ "serde",
+ "spin",
+ "variadics_please",
+]
+
+[[package]]
+name = "cubecl-std"
+version = "0.9.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e8ff5741c98b7a7a5944b4afb0b67dd7f5e0be41ce7f303b587f8b0d6430b29b"
 dependencies = [
- "cubecl-common",
- "cubecl-core",
- "cubecl-runtime",
+ "cubecl-common 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "cubecl-core 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "cubecl-runtime 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "foldhash 0.1.5",
  "half",
  "num-traits",
@@ -1729,6 +1974,27 @@ dependencies = [
 [[package]]
 name = "cubecl-wgpu"
 version = "0.9.0"
+dependencies = [
+ "async-channel",
+ "bytemuck",
+ "cfg-if",
+ "cfg_aliases",
+ "cubecl-common 0.9.0",
+ "cubecl-core 0.9.0",
+ "cubecl-ir 0.9.0",
+ "cubecl-runtime 0.9.0",
+ "derive-new",
+ "derive_more",
+ "half",
+ "hashbrown 0.15.5",
+ "log",
+ "sanitize-filename",
+ "wgpu",
+]
+
+[[package]]
+name = "cubecl-wgpu"
+version = "0.9.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "29787364632fc7ec6a11cf3d95187f82f6fcce17d6bb4f0fb0dde580b837631d"
 dependencies = [
@@ -1736,10 +2002,10 @@ dependencies = [
  "bytemuck",
  "cfg-if",
  "cfg_aliases",
- "cubecl-common",
- "cubecl-core",
- "cubecl-ir",
- "cubecl-runtime",
+ "cubecl-common 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "cubecl-core 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "cubecl-ir 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "cubecl-runtime 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "derive-new",
  "derive_more",
  "half",
@@ -1753,6 +2019,10 @@ dependencies = [
 [[package]]
 name = "cubecl-zspace"
 version = "0.9.0"
+
+[[package]]
+name = "cubecl-zspace"
+version = "0.9.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "7a0f819071413b19a00b7105497e0f6d2cf3e7e9d65cbb8d4ecf1ddb29c61dc2"
 
@@ -1762,7 +2032,7 @@ version = "0.1.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "1bb1cce47db02017925301bedec92ae84628493df3f9761ea7ac42a60c6146f8"
 dependencies = [
- "cubecl",
+ "cubecl 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "cubek-attention",
  "cubek-convolution",
  "cubek-matmul",
@@ -1778,8 +2048,8 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "7278bd122b2428af479f9af05285160613733c33c93b63ab3c6d25cd0460c18b"
 dependencies = [
  "bytemuck",
- "cubecl",
- "cubecl-common",
+ "cubecl 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "cubecl-common 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "cubek-matmul",
  "cubek-random",
  "half",
@@ -1793,8 +2063,8 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "18eb04bca4ae104d62a56def04b04f3d079c42fe49aac62202c96876f90fa28b"
 dependencies = [
  "bytemuck",
- "cubecl",
- "cubecl-common",
+ "cubecl 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "cubecl-common 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "cubek-matmul",
  "derive-new",
  "enumset",
@@ -1809,8 +2079,8 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "a28f3b04b113760e97c65a8a4dca9afc220744031eeecd5ad6cd0e3be91ba3a9"
 dependencies = [
  "bytemuck",
- "cubecl",
- "cubecl-common",
+ "cubecl 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "cubecl-common 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "half",
  "serde",
 ]
@@ -1821,8 +2091,8 @@ version = "0.1.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "96ec3ae04af324df2d615c2b394e270d58d6f08cb833d67633e2ba794de75916"
 dependencies = [
- "cubecl",
- "cubecl-common",
+ "cubecl 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "cubecl-common 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "half",
  "serde",
 ]
@@ -1833,8 +2103,8 @@ version = "0.1.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "65a34844d8b7f739185c1d24896137dcb73f458830444103b45f678585ad983e"
 dependencies = [
- "cubecl",
- "cubecl-common",
+ "cubecl 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "cubecl-common 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "half",
  "num-traits",
  "rand 0.9.2",
@@ -1847,7 +2117,7 @@ version = "0.1.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "42397d9ed85bb3084dfb56ed26de75690b5b07caf42a32f4006b57eb23d5b6d6"
 dependencies = [
- "cubecl",
+ "cubecl 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "half",
  "num-traits",
  "serde",
@@ -4524,6 +4794,7 @@ version = "0.1.0"
 dependencies = [
  "burn",
  "clap",
+ "cubecl 0.9.0",
  "glob",
  "half",
  "rand 0.10.0",

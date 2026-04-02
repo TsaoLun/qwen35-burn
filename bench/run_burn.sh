@@ -23,6 +23,9 @@ OUTPUT="$SCRIPT_DIR/results/burn.json"
 
 mkdir -p "$SCRIPT_DIR/results"
 
+export CUBECL_WGPU_MAX_TASKS=8
+export CUBECL_AUTOTUNE_LEVEL="full"  # minimal(0), balanced(1), extensive(2), full(3)
+
 echo "=== Burn benchmark (wgpu: fusion + autotune) ==="
 echo "Building..."
 cd "$PROJECT_DIR"

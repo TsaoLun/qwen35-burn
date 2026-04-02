@@ -97,22 +97,50 @@ fn run<B: burn::prelude::Backend>(args: &Args) {
     let mut sampler = Sampler::new_top_p(0.9, 42);
 
     // ── Warmup ────────────────────────────────────────────────────────────────
-    // Warmup uses greedy (temp=0): the GPU shaders are identical regardless of
-    // temperature — the sampling path difference is purely CPU-side.
+    // Warmup uses the same temperature as benchmark to exercise full pipeline.
     eprintln!(
         "Warming up ({} run(s) — compiling Metal/WGPU shaders)...",
         args.warmup
     );
     for i in 0..args.warmup {
-        let _ = model.generate(
-            tokenizer.inner(),
-            &formatted,
-            32,
-            0.0, // greedy — shader compilation only
-            &mut sampler,
-            &mut |_| {},
+        let mut first_token_elapsed: Option<f64> = None;
+        let t0 = Instant::now();
+
+        let out = model
+            .generate(
+                tokenizer.inner(),
+                &formatted,
+                args.decode_tokens,
+                args.temperature,
+                &mut sampler,
+                &mut |_piece| {
+                    if first_token_elapsed.is_none() {
+                        first_token_elapsed = Some(t0.elapsed().as_secs_f64());
+                    }
+                },
+            )
+            .unwrap_or_else(|e| panic!("Generation failed during warmup: {}", e));
+
+        let total_s = t0.elapsed().as_secs_f64();
+        let ttft_s = first_token_elapsed.unwrap_or(total_s);
+
+        // decode_tokens - 1 because token #1 is included in TTFT
+        let n_decode = out.tokens.saturating_sub(1);
+        let decode_time_s = (total_s - ttft_s).max(1e-9);
+        let decode_tps = n_decode as f64 / decode_time_s;
+
+        // prefill throughput approximation: prompt_tokens / TTFT
+        let prefill_tps = prompt_tokens as f64 / ttft_s.max(1e-9);
+
+        eprintln!(
+            "  warmup {}/{}: TTFT={:.0}ms  prefill={:.1} tok/s  decode={:.1} tok/s  ({} tokens)",
+            i + 1,
+            args.warmup,
+            ttft_s * 1000.0,
+            prefill_tps,
+            decode_tps,
+            out.tokens,
         );
-        eprintln!("  warmup {}/{} done", i + 1, args.warmup);
     }
 
     // ── Benchmark ─────────────────────────────────────────────────────────────
