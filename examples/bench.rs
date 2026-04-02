@@ -15,6 +15,8 @@ use serde_json::json;
 use burn::backend::NdArray;
 #[cfg(feature = "wgpu")]
 use burn::backend::Wgpu;
+#[cfg(feature = "metal")]
+use burn::backend::Metal;
 
 use qwen35_burn::{Qwen35, Qwen35Tokenizer, Sampler};
 
@@ -227,9 +229,11 @@ fn main() {
     let args = Args::parse();
     match args.backend.as_str() {
         #[cfg(feature = "wgpu")]
-        "wgpu" => run::<Wgpu>(&args),
+        "wgpu" => run::<Wgpu<half::f16>>(&args),
         #[cfg(feature = "ndarray")]
         "ndarray" => run::<NdArray>(&args),
+        #[cfg(feature = "metal")]
+        "metal" => run::<Metal<half::f16>>(&args),
         other => {
             eprintln!("Unknown backend '{}'. Available: wgpu, ndarray", other);
             std::process::exit(1);

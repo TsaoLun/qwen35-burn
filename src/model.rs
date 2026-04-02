@@ -559,7 +559,7 @@ impl<B: Backend> Qwen35<B> {
         let mask = build_causal_mask::<B>(prompt_len, prompt_len, &self.device);
         let prefill_logits =
             self.transformer
-                .forward(token_tensor, &self.rope, Some(mask), &mut self.caches, 0); // [1, S, vocab]
+                .forward(token_tensor, &self.rope, &mut self.caches, 0, Some(mask)); // [1, S, vocab]
 
         // Sample first decode token from the last prefill position
         let last_logits = prefill_logits
@@ -590,10 +590,9 @@ impl<B: Backend> Qwen35<B> {
 
             let td = TensorData::new(vec![next_token as i32], vec![1]);
             let tok = Tensor::<B, 1, Int>::from_data(td, &self.device).unsqueeze::<2>();
-            // No causal mask needed for single-token decode
             let logits = self
                 .transformer
-                .forward(tok, &self.rope, None, &mut self.caches, pos);
+                .forward(tok, &self.rope, &mut self.caches, pos, None);
             let logits = logits.reshape([1, vocab]);
             next_token = sample_token(&logits, temperature, sampler);
             pos += 1;

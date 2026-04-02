@@ -256,16 +256,17 @@ impl<B: Backend> FullAttention<B> {
     ///
     /// - `x`: `[batch, seq_len, hidden]`
     /// - `rope`: Partial RoPE
-    /// - `mask`: optional causal mask `[1, 1, q_seq, kv_seq]`
     /// - `cache`: KV cache
     /// - `start_pos`: position offset for RoPE and KV cache
+    ///
+    /// `mask`: optional `[B, 1, S, T]` additive mask (−∞ for masked positions).
     pub fn forward(
         &self,
         x: Tensor<B, 3>,
         rope: &PartialRotaryEmbedding<B>,
-        mask: Option<Tensor<B, 4>>,
         cache: &mut AttentionCache<B>,
         start_pos: usize,
+        mask: Option<Tensor<B, 4>>,
     ) -> Tensor<B, 3> {
         let [batch, seq_len, _hidden] = x.dims();
         let q_total_dim = self.num_heads * self.head_dim;
@@ -325,13 +326,11 @@ impl<B: Backend> FullAttention<B> {
 
         // Scaled dot-product attention
         let scale = (self.head_dim as f64).sqrt().recip();
-        let attn_weights = q.matmul(k.transpose()) * scale;
-        let attn_weights = match mask {
-            Some(m) => attn_weights + m,
-            None => attn_weights,
-        };
-        let attn_weights = activation::softmax(attn_weights, 3);
-        let attn_out = attn_weights.matmul(v); // [B, num_heads, S, head_dim]
+        let mut scores = q.matmul(k.transpose()) * scale; // [B, H, S, T]
+        if let Some(m) = mask {
+            scores = scores + m;
+        }
+        let attn_out = activation::softmax(scores, 3).matmul(v); // [B, H, S, D]
 
         // Reshape → [B, S, num_heads * head_dim]
         let attn_out = attn_out
@@ -789,9 +788,9 @@ impl<B: Backend> HybridBlock<B> {
         &self,
         x: Tensor<B, 3>,
         rope: &PartialRotaryEmbedding<B>,
-        mask: Option<Tensor<B, 4>>,
         layer_cache: &mut LayerCache<B>,
         start_pos: usize,
+        mask: Option<Tensor<B, 4>>,
     ) -> Tensor<B, 3> {
         // Token mixer (attention or SSM) with pre-norm + residual
         let x = {
@@ -799,7 +798,7 @@ impl<B: Backend> HybridBlock<B> {
             let h = self.input_ln.forward(x);
             let h = match (&self.mixer, layer_cache) {
                 (LayerMixer::Full(attn), LayerCache::Attn(cache)) => {
-                    attn.forward(h, rope, mask, cache, start_pos)
+                    attn.forward(h, rope, cache, start_pos, mask)
                 }
                 (LayerMixer::Linear(dn), LayerCache::Linear(cache)) => dn.forward(h, cache),
                 _ => panic!("Mismatched LayerMixer and LayerCache variant"),
@@ -892,24 +891,22 @@ impl<B: Backend> Transformer<B> {
     ///
     /// - `tokens`: `[batch, seq_len]`
     /// - `rope`: Partial RoPE tables
-    /// - `mask`: optional 2D causal mask (unsqueezed inside)
     /// - `caches`: one `LayerCache` per layer
     /// - `start_pos`: position offset
+    ///
     pub fn forward(
         &self,
         tokens: Tensor<B, 2, Int>,
         rope: &PartialRotaryEmbedding<B>,
-        mask: Option<Tensor<B, 2>>,
         caches: &mut [LayerCache<B>],
         start_pos: usize,
+        mask: Option<Tensor<B, 2>>,
     ) -> Tensor<B, 3> {
+        let mask4d = mask.map(|m| m.unsqueeze::<4>());
         let mut x = self.embed_tokens.forward(tokens);
 
-        // Pre-unsqueeze mask: [q, kv] → [1, 1, q, kv]
-        let mask4 = mask.map(|m| m.unsqueeze::<3>().unsqueeze::<4>());
-
         for (i, layer) in self.layers.iter().enumerate() {
-            x = layer.forward(x, rope, mask4.clone(), &mut caches[i], start_pos);
+            x = layer.forward(x, rope, &mut caches[i], start_pos, mask4d.clone());
         }
 
         x = self.norm.forward(x);

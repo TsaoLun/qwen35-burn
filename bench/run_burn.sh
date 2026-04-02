@@ -20,21 +20,22 @@ TEMPERATURE="${TEMPERATURE:-0.7}"
 WARMUP="${WARMUP:-5}"
 RUNS="${RUNS:-5}"
 OUTPUT="$SCRIPT_DIR/results/burn.json"
+BACKEND="${BACKEND:-wgpu}"
 
 mkdir -p "$SCRIPT_DIR/results"
 
-export CUBECL_WGPU_MAX_TASKS=8
+export CUBECL_WGPU_MAX_TASKS=42
 export CUBECL_AUTOTUNE_LEVEL="full"  # minimal(0), balanced(1), extensive(2), full(3)
 
-echo "=== Burn benchmark (wgpu: fusion + autotune) ==="
+echo "=== Burn benchmark ($BACKEND: fusion + autotune) ==="
 echo "Building..."
 cd "$PROJECT_DIR"
-cargo build --release --features wgpu --example bench 2>&1 | tail -3
+cargo build --release --features "$BACKEND" --example bench 2>&1 | tail -3
 
 echo "Running..."
 ./target/release/examples/bench \
     --model-dir     "$MODEL_DIR"     \
-    --backend       wgpu             \
+    --backend       "$BACKEND"       \
     --decode-tokens "$DECODE_TOKENS" \
     --temperature   "$TEMPERATURE"   \
     --warmup        "$WARMUP"        \
