@@ -8,8 +8,8 @@ description = "Qwen3.5 language model inference using the Burn deep learning fra
 [features]
 default = ["std"]
 std = []
-# wgpu with fusion (operator graph fusion) and autotune (kernel auto-selection)
-wgpu = ["burn/wgpu", "burn/fusion", "burn/autotune"]
+# wgpu with fusion + autotune. Custom CubeCL kernels use the fusion CustomOpIr pattern.
+wgpu = ["burn/wgpu", "burn/fusion", "burn/autotune", "burn/ir"]
 metal = ["burn/metal", "burn/fusion", "burn/autotune"]
 ndarray = ["burn/ndarray"]
 cuda = ["burn/cuda"]
@@ -21,7 +21,7 @@ name = "chat"
 name = "bench"
 
 [dependencies]
-burn = { git = "https://github.com/tracel-ai/burn.git", branch = "main" }
+burn = { git = "https://github.com/tracel-ai/burn.git", branch = "main", default-features = false, features = ["std"] }
 safetensors = "0.7"
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
@@ -31,9 +31,13 @@ half = { version = "2.4", features = ["serde"] }
 tracing = "0.1"
 glob = "0.3"
 
-# CubeCL for custom GPU kernels
-cubecl = { path = "cubecl/crates/cubecl", features = ["wgpu"] }
+# CubeCL for custom GPU kernels – must match the exact rev burn uses
+cubecl = { git = "https://github.com/tracel-ai/cubecl", rev = "01510dfb9dc62f7e520c294f73b83acf4164d058", features = ["wgpu"] }
+cubecl-runtime = { git = "https://github.com/tracel-ai/cubecl", rev = "01510dfb9dc62f7e520c294f73b83acf4164d058" }
+burn-fusion = { git = "https://github.com/tracel-ai/burn.git", branch = "main" }
+burn-ir = { git = "https://github.com/tracel-ai/burn.git", branch = "main" }
+burn-cubecl = { git = "https://github.com/tracel-ai/burn.git", branch = "main" }
 
 [dev-dependencies]
 clap = { version = "4", features = ["derive"] }
-burn = { git = "https://github.com/tracel-ai/burn.git", branch = "main" }
+burn = { git = "https://github.com/tracel-ai/burn.git", branch = "main", default-features = false, features = ["std"] }

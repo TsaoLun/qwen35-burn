@@ -319,18 +319,17 @@ impl<B: Backend> FullAttention<B> {
         let k = cache.k_cache.forward(k);
         let v = cache.v_cache.forward(v);
 
-        // GQA: expand K, V to match Q heads
-        let n_groups = self.num_heads / self.num_kv_heads;
-        let k = repeat_kv(k, n_groups);
-        let v = repeat_kv(v, n_groups);
-
-        // Scaled dot-product attention
-        let scale = (self.head_dim as f64).sqrt().recip();
-        let mut scores = q.matmul(k.transpose()) * scale; // [B, H, S, T]
-        if let Some(m) = mask {
-            scores = scores + m;
-        }
-        let attn_out = activation::softmax(scores, 3).matmul(v); // [B, H, S, D]
+        let attn_out = Self::attention_impl(
+            q,
+            k,
+            v,
+            mask,
+            self.num_heads,
+            self.num_kv_heads,
+            self.head_dim,
+            batch,
+            seq_len,
+        );
 
         // Reshape → [B, S, num_heads * head_dim]
         let attn_out = attn_out
@@ -342,6 +341,63 @@ impl<B: Backend> FullAttention<B> {
 
         // Output projection
         self.o_proj.forward(attn_out)
+    }
+
+    /// Attention implementation with optional flash-decode fast path for Wgpu.
+    /// q: [B, H, S, D], k: [B, KV_H, T, D], v: [B, KV_H, T, D]
+    /// Returns: [B, H, S, D]
+    fn attention_impl(
+        q: Tensor<B, 4>,
+        k: Tensor<B, 4>,
+        v: Tensor<B, 4>,
+        mask: Option<Tensor<B, 4>>,
+        num_heads: usize,
+        num_kv_heads: usize,
+        head_dim: usize,
+        _batch: usize,
+        seq_len: usize,
+    ) -> Tensor<B, 4> {
+        // Fast path: flash-decode kernel for single-token decode on Wgpu
+        #[cfg(feature = "wgpu")]
+        {
+            use std::any::TypeId;
+            if seq_len == 1
+                && mask.is_none()
+                && TypeId::of::<B>() == TypeId::of::<burn::backend::Wgpu>()
+            {
+                // SAFETY: TypeId confirms B is burn::backend::Wgpu, so both
+                // Tensor<B,4> and Tensor<Wgpu,4> are the same concrete type
+                // with identical size and layout.
+                unsafe {
+                    let q_w: Tensor<burn::backend::Wgpu, 4> = std::mem::transmute_copy(&q);
+                    std::mem::forget(q);
+                    let k_w: Tensor<burn::backend::Wgpu, 4> = std::mem::transmute_copy(&k);
+                    std::mem::forget(k);
+                    let v_w: Tensor<burn::backend::Wgpu, 4> = std::mem::transmute_copy(&v);
+                    std::mem::forget(v);
+
+                    let result = crate::cubecl_kernels::bridge::flash_decode_wgpu(
+                        q_w, k_w, v_w, num_heads, num_kv_heads, head_dim,
+                    );
+
+                    let result_b: Tensor<B, 4> = std::mem::transmute_copy(&result);
+                    std::mem::forget(result);
+                    return result_b;
+                }
+            }
+        }
+
+        // Generic fallback: standard matmul attention with GQA expansion
+        let n_groups = num_heads / num_kv_heads;
+        let k = repeat_kv(k, n_groups);
+        let v = repeat_kv(v, n_groups);
+
+        let scale = (head_dim as f64).sqrt().recip();
+        let mut scores = q.matmul(k.transpose()) * scale; // [B, H, S, T]
+        if let Some(m) = mask {
+            scores = scores + m;
+        }
+        activation::softmax(scores, 3).matmul(v) // [B, H, S, D]
     }
 }
 

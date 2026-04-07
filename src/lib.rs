@@ -1,5 +1,6 @@
 pub mod cache;
 pub mod config;
+pub mod cubecl_kernels;
 pub mod model;
 pub mod sampling;
 pub mod tokenizer;
